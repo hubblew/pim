@@ -21,35 +21,35 @@ func TestCreateStrategy(t *testing.T) {
 			strategyType: config.StrategyConcat,
 			outputPath:   "./output.md",
 			expectError:  false,
-			expectedType: reflect.TypeOf(&ConcatStrategy{}),
+			expectedType: reflect.TypeOf(&concatStrategy{}),
 		},
 		{
 			name:         "explicit flatten strategy",
 			strategyType: config.StrategyFlatten,
 			outputPath:   "./output",
 			expectError:  false,
-			expectedType: reflect.TypeOf(&FlattenStrategy{}),
+			expectedType: reflect.TypeOf(&flattenStrategy{}),
 		},
 		{
 			name:         "explicit preserve strategy",
 			strategyType: config.StrategyPreserve,
 			outputPath:   "./output",
 			expectError:  false,
-			expectedType: reflect.TypeOf(&PreserveStrategy{}),
+			expectedType: reflect.TypeOf(&preserveStrategy{}),
 		},
 		{
 			name:         "auto-detect concat from .md extension",
 			strategyType: "",
 			outputPath:   "./output.md",
 			expectError:  false,
-			expectedType: reflect.TypeOf(&ConcatStrategy{}),
+			expectedType: reflect.TypeOf(&concatStrategy{}),
 		},
 		{
 			name:         "auto-detect flatten from directory path",
 			strategyType: "",
 			outputPath:   "./output",
 			expectError:  false,
-			expectedType: reflect.TypeOf(&FlattenStrategy{}),
+			expectedType: reflect.TypeOf(&flattenStrategy{}),
 		},
 		{
 			name:         "invalid strategy type",
@@ -96,12 +96,12 @@ func TestCreateStrategyOutputPaths(t *testing.T) {
 		outputPath   string
 		expectedType reflect.Type
 	}{
-		{"markdown file", "docs.md", reflect.TypeOf(&ConcatStrategy{})},
-		{"nested markdown", "./nested/path/docs.md", reflect.TypeOf(&ConcatStrategy{})},
-		{"directory", "output/", reflect.TypeOf(&FlattenStrategy{})},
-		{"nested directory", "./nested/output", reflect.TypeOf(&FlattenStrategy{})},
-		{"yaml file", "config.yaml", reflect.TypeOf(&FlattenStrategy{})},
-		{"json file", "data.json", reflect.TypeOf(&FlattenStrategy{})},
+		{"markdown file", "docs.md", reflect.TypeOf(&concatStrategy{})},
+		{"nested markdown", "./nested/path/docs.md", reflect.TypeOf(&concatStrategy{})},
+		{"directory", "output/", reflect.TypeOf(&flattenStrategy{})},
+		{"nested directory", "./nested/output", reflect.TypeOf(&flattenStrategy{})},
+		{"yaml file", "config.yaml", reflect.TypeOf(&flattenStrategy{})},
+		{"json file", "data.json", reflect.TypeOf(&flattenStrategy{})},
 	}
 
 	for _, tt := range tests {

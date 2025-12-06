@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"reflect"
 
 	"github.com/hubblew/pim/internal/utils"
 )
@@ -13,8 +12,6 @@ import (
 type GeminiCLIAgent struct {
 	exec string
 }
-
-var GeminiCLIAgentType = reflect.TypeOf(new(GeminiCLIAgent))
 
 var _ TPAgentTool = (*GeminiCLIAgent)(nil)
 
@@ -24,11 +21,11 @@ func NewGeminiCLIAgent(path string) *GeminiCLIAgent {
 	}
 }
 
-func (a *GeminiCLIAgent) Descriptor() string {
+func (a GeminiCLIAgent) Descriptor() string {
 	return "Gemini CLI (" + a.exec + ")"
 }
 
-func (a *GeminiCLIAgent) ExecuteCommand(command string) (string, error) {
+func (a GeminiCLIAgent) ExecuteCommand(command string) (string, error) {
 	cmd := exec.Command(a.exec, "--approval-mode=yolo", fmt.Sprintf(`"%s"`, command))
 
 	var buf bytes.Buffer

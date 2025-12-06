@@ -11,16 +11,16 @@ type UserPrompter interface {
 	ConfirmOverwrite(path string) (bool, error)
 }
 
-// InteractivePrompter prompts the user via stdin for confirmation.
-type InteractivePrompter struct{}
+// interactivePrompter prompts the user via stdin for confirmation.
+type interactivePrompter struct{}
 
-var _ UserPrompter = (*InteractivePrompter)(nil)
+var _ UserPrompter = (*interactivePrompter)(nil)
 
-func NewInteractivePrompter() *InteractivePrompter {
-	return &InteractivePrompter{}
+func NewInteractivePrompter() UserPrompter {
+	return &interactivePrompter{}
 }
 
-func (p *InteractivePrompter) ConfirmOverwrite(path string) (bool, error) {
+func (p *interactivePrompter) ConfirmOverwrite(path string) (bool, error) {
 	fmt.Printf("File %s already exists. Overwrite?\n", path)
 
 	choice, err := ui.NewChoiceDialog("Please confirm:", ui.ChoicesYesNo()).Run()
@@ -35,14 +35,14 @@ func (p *InteractivePrompter) ConfirmOverwrite(path string) (bool, error) {
 	return choice.Value.(bool), nil
 }
 
-type AcceptAllPrompter struct{}
+type acceptAllPrompter struct{}
 
-var _ UserPrompter = (*AcceptAllPrompter)(nil)
+var _ UserPrompter = (*acceptAllPrompter)(nil)
 
-func NewAcceptAllPrompter() *AcceptAllPrompter {
-	return &AcceptAllPrompter{}
+func NewAcceptAllPrompter() UserPrompter {
+	return &acceptAllPrompter{}
 }
 
-func (p *AcceptAllPrompter) ConfirmOverwrite(_ string) (bool, error) {
+func (p *acceptAllPrompter) ConfirmOverwrite(_ string) (bool, error) {
 	return true, nil
 }

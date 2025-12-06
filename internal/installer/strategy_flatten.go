@@ -9,21 +9,21 @@ import (
 	"github.com/spf13/afero"
 )
 
-type FlattenStrategy struct {
+type flattenStrategy struct {
 	fs         afero.Fs
 	outputPath string
 }
 
-var _ Strategy = (*FlattenStrategy)(nil)
+var _ Strategy = (*flattenStrategy)(nil)
 
-func NewFlattenStrategy(fs afero.Fs, path string) *FlattenStrategy {
-	return &FlattenStrategy{
+func NewFlattenStrategy(fs afero.Fs, path string) Strategy {
+	return &flattenStrategy{
 		fs:         fs,
 		outputPath: path,
 	}
 }
 
-func (s *FlattenStrategy) Initialize(_ UserPrompter) error {
+func (s *flattenStrategy) Initialize(_ UserPrompter) error {
 	if err := s.fs.RemoveAll(s.outputPath); err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("failed to delete output directory '%s': %w", s.outputPath, err)
 	}
@@ -34,11 +34,11 @@ func (s *FlattenStrategy) Initialize(_ UserPrompter) error {
 	return nil
 }
 
-func (s *FlattenStrategy) AddFile(srcPath, relativePath string) error {
+func (s *flattenStrategy) AddFile(srcPath, relativePath string) error {
 	dstPath := filepath.Join(s.outputPath, filepath.Base(relativePath))
 	return utils.CopyFile(s.fs, srcPath, dstPath)
 }
 
-func (s *FlattenStrategy) Close() error {
+func (s *flattenStrategy) Close() error {
 	return nil
 }

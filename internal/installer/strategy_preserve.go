@@ -9,21 +9,21 @@ import (
 	"github.com/spf13/afero"
 )
 
-type PreserveStrategy struct {
+type preserveStrategy struct {
 	fs         afero.Fs
 	outputPath string
 }
 
-var _ Strategy = (*PreserveStrategy)(nil)
+var _ Strategy = (*preserveStrategy)(nil)
 
-func NewPreserveStrategy(fs afero.Fs, path string) *PreserveStrategy {
-	return &PreserveStrategy{
+func NewPreserveStrategy(fs afero.Fs, path string) Strategy {
+	return &preserveStrategy{
 		fs:         fs,
 		outputPath: path,
 	}
 }
 
-func (s *PreserveStrategy) Initialize(_ UserPrompter) error {
+func (s *preserveStrategy) Initialize(_ UserPrompter) error {
 	if err := s.fs.RemoveAll(s.outputPath); err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("failed to delete output directory '%s': %w", s.outputPath, err)
 	}
@@ -34,11 +34,11 @@ func (s *PreserveStrategy) Initialize(_ UserPrompter) error {
 	return nil
 }
 
-func (s *PreserveStrategy) AddFile(srcPath, relativePath string) error {
+func (s *preserveStrategy) AddFile(srcPath, relativePath string) error {
 	dstPath := filepath.Join(s.outputPath, relativePath)
 	return utils.CopyFile(s.fs, srcPath, dstPath)
 }
 
-func (s *PreserveStrategy) Close() error {
+func (s *preserveStrategy) Close() error {
 	return nil
 }

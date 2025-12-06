@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 
 	"github.com/goccy/go-yaml"
@@ -191,8 +190,8 @@ func discoverInstructionFiles(instructionsDir string) []string {
 func generateConfig(tool tpagents.TPAgentTool, instructionsDir string, existingFiles []string) (*config.Config, error) {
 	cfg := config.NewConfig()
 
-	switch reflect.TypeOf(tool) {
-	case tpagents.GhCopilotAgentType:
+	switch tool.(type) {
+	case tpagents.GhCopilotAgent:
 		target := config.Target{
 			Name:    "copilot-instructions",
 			Output:  ".github/copilot-instructions.md",
@@ -210,7 +209,7 @@ func generateConfig(tool tpagents.TPAgentTool, instructionsDir string, existingF
 
 		cfg.Targets = []config.Target{target}
 
-	case tpagents.GeminiCLIAgentType:
+	case tpagents.GeminiCLIAgent:
 		target := config.Target{
 			Name:    "gemini-instructions",
 			Output:  "GEMINI.md",
@@ -228,7 +227,7 @@ func generateConfig(tool tpagents.TPAgentTool, instructionsDir string, existingF
 
 		cfg.Targets = []config.Target{target}
 
-	case tpagents.ManualAgentType:
+	case tpagents.ManualAgent:
 		target := config.Target{
 			Name:    "manual-instructions",
 			Output:  "AGENTS.md",

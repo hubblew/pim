@@ -2,7 +2,6 @@ package tpagents
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/charmbracelet/glamour"
 	"github.com/hubblew/pim/internal/ui"
@@ -10,19 +9,17 @@ import (
 
 type ManualAgent struct{}
 
-var ManualAgentType = reflect.TypeOf(new(ManualAgent))
-
 var _ TPAgentTool = (*ManualAgent)(nil)
 
 func NewManualAgent() *ManualAgent {
 	return &ManualAgent{}
 }
 
-func (a *ManualAgent) Descriptor() string {
+func (a ManualAgent) Descriptor() string {
 	return "Manual (just output prompts, let me do it myself)"
 }
 
-func (a *ManualAgent) ExecuteCommand(command string) (string, error) {
+func (a ManualAgent) ExecuteCommand(command string) (string, error) {
 	r, err := glamour.NewTermRenderer(
 		glamour.WithAutoStyle(),
 		glamour.WithWordWrap(100),

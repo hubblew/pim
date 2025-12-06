@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
-	"reflect"
 
 	"github.com/hubblew/pim/internal/utils"
 )
@@ -12,8 +11,6 @@ import (
 type GhCopilotAgent struct {
 	exec string
 }
-
-var GhCopilotAgentType = reflect.TypeOf(new(GhCopilotAgent))
 
 var _ TPAgentTool = (*GhCopilotAgent)(nil)
 
@@ -23,11 +20,11 @@ func NewGhCopilotAgent(path string) *GhCopilotAgent {
 	}
 }
 
-func (a *GhCopilotAgent) Descriptor() string {
+func (a GhCopilotAgent) Descriptor() string {
 	return "GitHub Copilot CLI (" + a.exec + ")"
 }
 
-func (a *GhCopilotAgent) ExecuteCommand(command string) (string, error) {
+func (a GhCopilotAgent) ExecuteCommand(command string) (string, error) {
 	cmd := exec.Command(a.exec, "--allow-all-tools", "--prompt", command)
 
 	var buf bytes.Buffer

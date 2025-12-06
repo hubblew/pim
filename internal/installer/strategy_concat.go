@@ -9,22 +9,22 @@ import (
 	"github.com/spf13/afero"
 )
 
-type ConcatStrategy struct {
+type concatStrategy struct {
 	fs         afero.Fs
 	outputPath string
 	outFile    afero.File
 }
 
-var _ Strategy = (*ConcatStrategy)(nil)
+var _ Strategy = (*concatStrategy)(nil)
 
-func NewConcatStrategy(fs afero.Fs, path string) *ConcatStrategy {
-	return &ConcatStrategy{
+func NewConcatStrategy(fs afero.Fs, path string) Strategy {
+	return &concatStrategy{
 		fs:         fs,
 		outputPath: path,
 	}
 }
 
-func (s *ConcatStrategy) Initialize(prompter UserPrompter) error {
+func (s *concatStrategy) Initialize(prompter UserPrompter) error {
 	if _, err := s.fs.Stat(s.outputPath); err == nil {
 		isGeneratedByPim, err := IsPimGenerated(s.fs, s.outputPath)
 		if err != nil {
@@ -64,7 +64,7 @@ func (s *ConcatStrategy) Initialize(prompter UserPrompter) error {
 	return nil
 }
 
-func (s *ConcatStrategy) AddFile(srcPath, _ string) error {
+func (s *concatStrategy) AddFile(srcPath, _ string) error {
 	srcFile, err := s.fs.Open(srcPath)
 	if err != nil {
 		return fmt.Errorf("failed to open source file '%s': %w", srcPath, err)
@@ -82,7 +82,7 @@ func (s *ConcatStrategy) AddFile(srcPath, _ string) error {
 	return nil
 }
 
-func (s *ConcatStrategy) Close() error {
+func (s *concatStrategy) Close() error {
 	if s.outFile != nil {
 		return s.outFile.Close()
 	}

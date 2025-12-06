@@ -73,7 +73,7 @@ func (i *Installer) Install(options *Options) error {
 	}
 
 	for _, target := range options.Config.Targets {
-		if err := InstallTarget(i, &target, sourceDirsByName, options.UserPrompter); err != nil {
+		if err := installTarget(i, &target, sourceDirsByName, options.UserPrompter); err != nil {
 			return err
 		}
 	}
@@ -82,7 +82,7 @@ func (i *Installer) Install(options *Options) error {
 	return nil
 }
 
-func InstallTarget(i *Installer, target *config.Target, sourceDirsByName map[string]string, prompter UserPrompter) error {
+func installTarget(i *Installer, target *config.Target, sourceDirsByName map[string]string, prompter UserPrompter) error {
 	fmt.Printf("Installing target '%s' to %s...\n", target.Name, target.Output)
 
 	strategy, err := NewStrategy(i.fs, target.StrategyType, target.Output)
